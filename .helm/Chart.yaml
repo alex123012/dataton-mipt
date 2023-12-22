@@ -1,0 +1,4 @@
+dependencies:
+  - name: helm-apps
+    version: ~1
+    repository: "https://flant.github.io/helm-apps"

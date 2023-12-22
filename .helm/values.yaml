@@ -1,0 +1,61 @@
+global:
+  _includes:
+    apps-defaults:
+      enabled: true
+
+apps-secrets:
+  app-config:
+    _include:
+      - apps-defaults
+    data:
+      config.yaml: |
+        predictor: Mock
+
+        streams:
+          - name: Chong Mon beach
+            url: https://www.youtube.com/live/4z2PSYA-NOI?si=LC-DHPzDk6QKO8eJ
+            video_parser: Youtube
+          - name: Sanxiantai beach
+            url: https://www.youtube.com/live/dQ7Sd6PGLdA?si=oeBHmO_BUJ3eX79h
+            video_parser: Youtube
+
+        notificators:
+          - name: Telegram
+            settings:
+              chat_id: "{{ $.Values.settings.telegram.chat_id | list $ . | include "fl.value" }}"
+              token: "{{ $.Values.settings.telegram.token | list $ . | include "fl.value" }}"
+
+apps-stateless:
+  app:
+    _include:
+      - "apps-defaults"
+    imagePullSecrets: |
+      - name: gitlab-regcred
+    replicas: 1
+    annotations: |
+      kubectl.kubernetes.io/default-container: app
+    volumes: |
+      - name: "{{ $.CurrentApp.name }}-config"
+        secret:
+          secretName: "app-config"
+    containers:
+      app:
+        image:
+          name: "{{ $.CurrentApp.name }}"
+          generateSignatureBasedTag: true
+        command: |
+          - python
+          - /app/main.py
+        args:
+          - /app/config.yaml
+        volumeMounts: |
+          - name: "{{ $.CurrentApp.name }}-config"
+            mountPath: "/app/config.yaml"
+            subPath: config.yaml
+            readOnly: true
+        resources:
+          limits:
+            memoryMb: 2048
+          requests:
+            memoryMb: 2048
+            mcpu: 500

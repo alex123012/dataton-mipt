@@ -3,7 +3,7 @@ project: dataton-mipt
 configVersion: 1
 ---
 image: app
-from: python3.11
+from: python:3.11
 docker:
   WORKDIR: /app
   ENV:
