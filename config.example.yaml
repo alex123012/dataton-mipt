@@ -1,0 +1,12 @@
+predictor: <Mock | ...>
+
+streams:
+  - name: <unqiue name>
+    url: <stream url>
+    video_parser: Youtube # only Youtube now available
+
+notificators:
+  - name: Telegram
+    settings:
+      chat_id: "<chat id>"
+      token: "<chat id>"

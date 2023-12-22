@@ -1,0 +1,35 @@
+---
+project: dataton-mipt
+configVersion: 1
+---
+image: app
+from: python3.11
+docker:
+  WORKDIR: /app
+  ENV:
+    PYTHONPATH: /app
+    PATH: "/app/.venv/bin:$PATH"
+git:
+  - add: /
+    to: /app
+    includePaths:
+      - async_queue
+      - config
+      - notificator
+      - predictor
+      - video_parser
+      - main.py
+      - poetry.lock
+      - pyproject.toml
+    stageDependencies:
+      install:
+        - poetry.lock
+        - pyproject.toml
+      setup:
+        - '**/*'
+shell:
+  install:
+    - cd /app && poetry config virtualenvs.create true
+    - cd /app && poetry config virtualenvs.in-project true
+    - cd /app && poetry install --only main
+    - cd /app && poetry cache clear pypi --all

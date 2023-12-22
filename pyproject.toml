@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "dataton-mipt"
+version = "0.1.0"
+description = ""
+authors = ["alex123012 <makhonin.a.ru@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+opencv-python = "^4.8.1.78"
+vidgear = "^0.3.2"
+yt-dlp = "^2023.11.16"
+pydantic = "^2.5.2"
+pyyaml = "^6.0.1"
+types-pyyaml = "^6.0.12.12"
+python-telegram-bot = "^20.7"
+types-requests = "^2.31.0.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+ignore_missing_imports = true
