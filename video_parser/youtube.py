@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, AsyncGenerator, Self
+from typing import TYPE_CHECKING, Generator, Self
 
 from vidgear.gears import CamGear
 
@@ -28,7 +28,7 @@ class YoutubeVideoParser(AbstractVideoParser):
 
         self.frame_delay = delay_secs * 30
 
-    async def start(self: Self) -> AsyncGenerator[np.ndarray, None]:
+    def start(self: Self) -> Generator[np.ndarray, None, None]:
         self.__stream = self.__cam_gear.start()
         currentframe = self.frame_delay - 1
         while True:

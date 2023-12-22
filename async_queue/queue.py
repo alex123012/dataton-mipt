@@ -59,7 +59,7 @@ class Queue:
                 continue
 
             stacktrace_string = "\n".join(list(map(str, task.get_stack())))
-            logging.error(f"Task exited with exception:\n{stacktrace_string}\n{task.exception()}")
+            logging.error("Task exited with exception:\n%s\n%s", stacktrace_string, task.exception())
             logging.info("Rescheduling the task\n")
 
             self.__rerun_task(task)

@@ -21,9 +21,9 @@ class TelegramNotificator(AbstractNotificator):
         }
 
         bot_url = f"https://api.telegram.org/bot{self.token}/sendMessage"
-        logging.info(f"sending notification to Telegram with data: {data}")
+        logging.info("sending notification to Telegram with data: %s", data)
         with requests.post(bot_url, data=data, timeout=5) as resp:
             if resp.ok:
                 return
 
-            logging.error(f"error sending telegram notification:\n{resp.text}")
+            logging.error("error sending telegram notification:\n%s", resp.text)

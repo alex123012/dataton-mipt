@@ -30,3 +30,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 120
+
+[tool.pylint]
+disable = "C0115,C0114,C0116,R0903,W0201"
+max-line-length = 120
+
+[tool.black]
+line-length = 120

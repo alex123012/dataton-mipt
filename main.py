@@ -4,13 +4,17 @@ import asyncio
 import logging
 import signal
 import sys
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from async_queue import Queue, TaskDefinition
 from config import Notificator, Predictor, VideoParser, load_config
 from notificator import AbstractNotificator, TelegramNotificator
 from predictor import AbstractPredictor, MockPredictor
 from video_parser import AbstractVideoParser, YoutubeVideoParser
+
+
+if TYPE_CHECKING:
+    from types import FrameType
 
 
 logging.basicConfig(
@@ -20,26 +24,26 @@ logging.basicConfig(
 
 
 def load_parser(name: VideoParser, url: str) -> AbstractVideoParser:
-    if name == VideoParser.Youtube:
+    if name == VideoParser.YOUTUBE:
         return YoutubeVideoParser(url)
     raise ValueError(f"Not supported parser: {name}")
 
 
 def load_notificator(name: Notificator, settings: dict[str, Any]) -> AbstractNotificator:
-    if name == Notificator.Telegram:
+    if name == Notificator.TELEGRAM:
         return TelegramNotificator(**settings)
     raise ValueError(f"Not supported notificator: {name}")
 
 
 def load_predictor(name: Predictor) -> AbstractPredictor:
-    if name == Predictor.Mock:
+    if name == Predictor.MOCK:
         return MockPredictor()
     raise ValueError(f"Not supported predictor: {name}")
 
 
 def producer_definitions(parsers: dict[str, AbstractVideoParser], predictor: AbstractPredictor) -> list[TaskDefinition]:
     async def producer(queue: asyncio.Queue, name: str, parser: AbstractVideoParser, lock: asyncio.Lock) -> None:
-        async for frame in parser.start():
+        for frame in parser.start():
             async with lock:
                 predict = predictor.predict(frame, name)
             if not predict.result:
@@ -68,7 +72,7 @@ def main() -> None:
     notificators = [load_notificator(s.name, s.settings) for s in config.notificators]
     predictor = load_predictor(config.predictor)
 
-    def exit_handler(_: int = 0, __: signal.FrameType | None = None) -> None:
+    def exit_handler(_: int = 0, __: FrameType | None = None) -> None:
         logging.info("Exiting...")
         for parser in parsers.values():
             parser.stop()

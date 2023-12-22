@@ -31,18 +31,18 @@ class NotificatorSettings(YamlModel):
 
 
 class Notificator(enum.Enum):
-    Telegram = "Telegram"
+    TELEGRAM = "Telegram"
 
 
 class Predictor(enum.Enum):
-    Mock = "Mock"
+    MOCK = "Mock"
 
 
 class VideoParser(enum.Enum):
-    Youtube = "Youtube"
+    YOUTUBE = "Youtube"
 
 
 def load_config(path: str) -> Config:
-    with Path(path).open() as f:
+    with Path(path).open(encoding="utf-8") as f:
         contents = yaml.safe_load(f)
     return Config.model_validate_json(json.dumps(contents))
