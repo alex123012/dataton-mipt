@@ -13,10 +13,16 @@ vidgear = "^0.3.2"
 yt-dlp = "^2023.11.16"
 pydantic = "^2.5.2"
 pyyaml = "^6.0.1"
-types-pyyaml = "^6.0.12.12"
 python-telegram-bot = "^20.7"
-types-requests = "^2.31.0.10"
 
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.5.1"
+black = "^23.9.1"
+pylint = "^3.0.1"
+ruff = "^0.0.292"
+types-pyyaml = "^6.0.12.12"
+types-requests = "^2.31.0.10"
 
 [build-system]
 requires = ["poetry-core"]
