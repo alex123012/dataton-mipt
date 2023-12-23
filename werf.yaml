@@ -29,6 +29,7 @@ git:
         - '**/*'
 shell:
   install:
+    - pip install poetry
     - cd /app && poetry config virtualenvs.create true
     - cd /app && poetry config virtualenvs.in-project true
     - cd /app && poetry install --only main

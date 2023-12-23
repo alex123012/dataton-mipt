@@ -7,20 +7,19 @@ jobs:
   converge:
     name: Converge
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Install werf
-        uses: werf/actions/install@v1.2
-
-      - name: Run script
-        run: |
-          . $(werf ci-env github --as-file)
-          werf build
+      - name: Converge
+        uses: werf/actions/converge@v1.2
+        with:
+          env: dev
+          kube-config-base64-data: ${{ secrets.WERF_KUBECONFIG_BASE64 }}
         env:
-          WERF_KUBECONFIG_BASE64: ${{ secrets.KUBE_CONFIG_BASE64_DATA }}
-          WERF_ENV: dev
+          WERF_NAMESPACE: dataton-mipt
