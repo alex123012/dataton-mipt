@@ -13,14 +13,17 @@ git:
   - add: /
     to: /app
     includePaths:
-      - async_queue
-      - config
+      - model
       - notificator
       - predictor
+      - static
+      - templates
       - video_parser
-      - main.py
+      - app.py
       - poetry.lock
       - pyproject.toml
+      - settings.py
+      - tasks.py
     stageDependencies:
       install:
         - poetry.lock

@@ -1,61 +1,178 @@
+settings:
+  app:
+    port: 8000
+    domain: dataton-mipt.alignfig.com
+
 global:
   _includes:
     apps-defaults:
       enabled: true
 
-apps-secrets:
-  app-config:
-    _include:
-      - apps-defaults
-    data:
-      config.yaml: |
-        predictor: Mock
+    redis-conn-str:
+      containers:
+        app:
+          secretEnvVars:
+            REDIS_URL: 'redis://:{{ (index $.Values "apps-secrets").redis_secret.data.REDIS_PASSWORD | list $ . | include "fl.value" }}@{{ printf "%s-master" (include "common.names.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.redis)) }}:6379'
+    postgres-conn-str:
+      containers:
+        app:
+          secretEnvVars:
+            DATABASE_URL: 'postgresql://{{ $.Values.postgresql.auth.username }}:{{ (index $.Values "apps-secrets").postgres_secret.data.USER_PASSWORD | list $ . | include "fl.value" }}@{{ include "postgresql.v1.primary.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.postgresql) }}:5432/{{ $.Values.postgresql.auth.database }}'
 
-        streams:
-          - name: Chong Mon beach
-            url: https://www.youtube.com/live/4z2PSYA-NOI?si=LC-DHPzDk6QKO8eJ
-            video_parser: Youtube
-          - name: Sanxiantai beach
-            url: https://www.youtube.com/live/dQ7Sd6PGLdA?si=oeBHmO_BUJ3eX79h
-            video_parser: Youtube
-
-        notificators:
-          - name: Telegram
-            settings:
-              chat_id: "{{ $.Values.settings.telegram.chat_id | list $ . | include "fl.value" }}"
-              token: "{{ $.Values.settings.telegram.token | list $ . | include "fl.value" }}"
+    apps-stateless-app:
+      _include:
+        - "apps-defaults"
+      replicas: 1
+      annotations: |
+        kubectl.kubernetes.io/default-container: app
+      securityContext: |
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+      containers:
+        app:
+          image:
+            name: "app"
+            generateSignatureBasedTag: true
+          securityContext: |
+            allowPrivilegeEscalation: false
 
 apps-stateless:
   app:
     _include:
-      - "apps-defaults"
-    imagePullSecrets: |
-      - name: gitlab-regcred
-    replicas: 1
-    annotations: |
-      kubectl.kubernetes.io/default-container: app
-    volumes: |
-      - name: "{{ $.CurrentApp.name }}-config"
-        secret:
-          secretName: "app-config"
+      - apps-stateless-app
+      - redis-conn-str
+      - postgres-conn-str
     containers:
       app:
-        image:
-          name: "{{ $.CurrentApp.name }}"
-          generateSignatureBasedTag: true
         command: |
-          - python
-          - /app/main.py
-        args:
-          - /app/config.yaml
-        volumeMounts: |
-          - name: "{{ $.CurrentApp.name }}-config"
-            mountPath: "/app/config.yaml"
-            subPath: config.yaml
-            readOnly: true
+          - uvicorn
+          - app:app
+        ports: |
+          - name: http
+            port: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
+        resources:
+          limits:
+            memoryMb: 512
+          requests:
+            memoryMb: 512
+            mcpu: 500
+        secretEnvVars:
+          GITHUB_CLIENT_ID: '{{ $.Values.settings.github.client_id | list $ . | include "fl.value" }}'
+          GITHUB_CLIENT_SECRET: '{{ $.Values.settings.github.client_secret | list $ . | include "fl.value" }}'
+          GITHUB_ACCESS_TOKEN_URL: "https://github.com/login/oauth/access_token"
+          GITHUB_AUTHORIZE_URL: "https://github.com/login/oauth/authorize"
+          GITHUB_API_BASE_URL: "https://api.github.com/"
+    service:
+      enabled: true
+      ports: |
+        - name: http
+          port: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
+
+  beat:
+    _include:
+      - apps-stateless-app
+      - redis-conn-str
+    containers:
+      app:
+        command: |
+          - celery
+          - beat
+          - --app=tasks
+          - --loglevel=INFO
+          - --scheduler=redbeat.RedBeatScheduler
+        resources:
+          limits:
+            memoryMb: 256
+          requests:
+            memoryMb: 256
+            mcpu: 100
+        secretEnvVars:
+          REDIS_URL:
+
+  worker:
+    _include:
+      - apps-stateless-app
+      - redis-conn-str
+      - postgres-conn-str
+    containers:
+      app:
+        command: |
+          - celery
+          - worker
+          - --app=tasks
+          - --loglevel=INFO
         resources:
           limits:
             memoryMb: 2048
           requests:
             memoryMb: 2048
             mcpu: 500
+
+postgresql:
+  fullnameOverride: postgres
+  # image:
+  #   registry: "" # don't fill
+  #   repository: ""
+  #   tag: ""
+  #   pullSecrets:
+  #     - name: registrysecret
+  auth:
+    postgresPassword: ""
+    username: "app"
+    database: "app"
+    existingSecret: "postgres-secret"
+    secretKeys:
+      adminPasswordKey: ADMIN_PASSWORD
+      userPasswordKey: USER_PASSWORD
+  primary:
+    persistence:
+      size: 4Gi
+      storageClass: linstor_sdb
+
+redis:
+  architecture: standalone
+  fullnameOverride: redis
+  # image:
+  #   registry: "" # don't fill
+  #   repository: ""
+  #   tag: ""
+  #   pullSecrets:
+  #     - name: registrysecret
+  auth:
+    enabled: true
+    existingSecret: "redis-secret"
+    existingSecretPasswordKey: "REDIS_PASSWORD"
+  master:
+    persistence:
+      size: 2Gi
+      storageClass: linstor_sdb
+  serviceAccount:
+    create: false
+
+apps-ingresses:
+  api:
+    _include: ["apps-defaults"]
+    enabled: true
+    class: "nginx"
+    host: '{{ $.Values.settings.app.domain | list $ . | include "fl.value" }}'
+    annotations: |
+      nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+      nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE
+      nginx.ingress.kubernetes.io/cors-allow-origin: {{ $.Values.settings.app.domain | list $ . | include "fl.value" }}
+      nginx.ingress.kubernetes.io/enable-cors: "true"
+    paths: |
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: "{{ $.CurrentApp.name }}"
+            port:
+              number: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
+    tls:
+      enabled: true
+      secret_name: "app-tls"
+apps-certificates:
+  app-tls:
+    _include: ["apps-defaults"]
+    host: '{{ $.Values.settings.app.domain | list $ . | include "fl.value" }}'

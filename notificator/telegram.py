@@ -18,6 +18,7 @@ class TelegramNotificator(AbstractNotificator):
         data = {
             "chat_id": self.chat_id,
             "text": html.escape(message),
+            "parse_mode": "html",
         }
 
         bot_url = f"https://api.telegram.org/bot{self.token}/sendMessage"

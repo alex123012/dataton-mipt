@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Generator, Self
+from typing import TYPE_CHECKING, Self
 
 
 if TYPE_CHECKING:
@@ -10,9 +10,5 @@ if TYPE_CHECKING:
 
 class AbstractVideoParser(ABC):
     @abstractmethod
-    def start(self: Self) -> Generator[np.ndarray, None, None]:
-        pass
-
-    @abstractmethod
-    def stop(self: Self) -> None:
+    def get_frame(self: Self) -> np.ndarray:
         pass

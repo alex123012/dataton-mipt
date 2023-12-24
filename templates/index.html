@@ -1,0 +1,87 @@
+<html>
+
+<head>
+  <title>Item Details</title>
+  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  {%if userinfo %}
+  <h1>Hello, {{ userinfo.name }}</h1>
+  <a href="/logout">logout</a>
+  <form action="/notificators" method="POST">
+    <label for="name">Notificator name:</label><br>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="kind">Notificator kind:</label><br>
+    <select name="kind" id="kind">
+      {% for notificator_type in notificator_types %}
+      <option value="{{ notificator_type.value }}">{{ notificator_type.value }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label for="settings">Notificator settings in '&lt;key&gt;=&lt;value&gt;,&lt;key&gt;=&lt;value&gt;'
+      format</label><br>
+    <input type="text" id="settings" name="settings"><br><br>
+
+    <input type="submit" value="Create new notificator">
+  </form>
+
+
+  <form action="/streams" method="POST" id="streams">
+    <label for="name">Stream name:</label><br>
+    <input type="text" id="name" name="name"><br>
+
+    <label for="settings">Stream url:</label><br>
+    <input type="text" id="url" name="url"><br>
+
+    <label for="predictor">Predictor:</label><br>
+    <select name="predictor" id="predictor">
+      {% for predictor in predictors %}
+      <option value="{{ predictor.value }}">{{ predictor.value }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label for="video_parser">Stream video parser:</label><br>
+    <select name="video_parser" id="video_parser">
+      {% for video_parser in video_parsers %}
+      <option value="{{ video_parser.value }}">{{ video_parser.value }}</option>
+      {% endfor %}
+    </select><br><br>
+
+    <input type="submit" value="Create new stream">
+  </form>
+
+  <h2>Notificators</h2>
+  <ul>
+    {%for notificator in notificators%}
+    <li>
+      {{ notificator }}
+      <form action="/notificators/delete" method="GET">
+        <input type="hidden" name="name" id="name" value="{{ notificator.name }}" />
+        <input type="submit" value="delete">
+      </form>
+    </li>
+    {%endfor%}
+  </ul>
+
+
+  <h2>Streams</h2>
+  <ul>
+    {%for stream in streams%}
+    <li>
+      {{ stream }}
+      <form action="/streams/delete" method="GET">
+        <input type="hidden" name="name" id="name" value="{{ stream.name }}" />
+        <input type="submit" value="delete">
+      </form>
+    </li>
+    {%endfor%}
+  </ul>
+
+  {% else %}
+  <a href="/login">login</a>
+  {% endif %}
+</body>
+
+</html>

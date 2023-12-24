@@ -2,5 +2,11 @@ dependencies:
 - name: helm-apps
   repository: https://flant.github.io/helm-apps
   version: 1.2.14
-digest: sha256:0ad9dbbde906dfdd2ea4f398bdaa245c260a3de32752cb3ba25081469075366e
-generated: "2023-12-22T05:33:25.118613+03:00"
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 13.2.25
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.6.1
+digest: sha256:e924901e12980ab82ff798779fb35ffdf2f4d23651221cb482aae5efcfef55f7
+generated: "2023-12-24T06:22:49.634105+03:00"
