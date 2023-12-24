@@ -33,13 +33,12 @@ pylint = "^3.0.1"
 ruff = "^0.0.292"
 types-pyyaml = "^6.0.12.12"
 types-requests = "^2.31.0.10"
+celery-types = "^0.20.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.mypy]
-ignore_missing_imports = true
 
 [tool.ruff]
 line-length = 120

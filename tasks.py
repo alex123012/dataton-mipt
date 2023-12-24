@@ -26,9 +26,9 @@ def load_video_parser(name: VideoParser, url: str) -> AbstractVideoParser:
     raise ValueError(f"Not supported parser: {name}")
 
 
-def load_notificator(name: NotificatorType, settings: dict[str, str]) -> AbstractNotificator:
+def load_notificator(name: NotificatorType, notificator_settings: dict[str, str]) -> AbstractNotificator:
     if name == NotificatorType.TELEGRAM:
-        return TelegramNotificator(**settings)
+        return TelegramNotificator(**notificator_settings)
     raise ValueError(f"Not supported notificator: {name}")
 
 

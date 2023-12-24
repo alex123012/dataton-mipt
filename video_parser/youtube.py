@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Self
 
-from vidgear.gears import CamGear
+from vidgear.gears import CamGear  # type:ignore[import-untyped]
 
 from .abstract import AbstractVideoParser
 

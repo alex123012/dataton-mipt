@@ -32,8 +32,9 @@ git:
         - '**/*'
 shell:
   install:
+    - apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
     - pip install poetry
     - cd /app && poetry config virtualenvs.create true
     - cd /app && poetry config virtualenvs.in-project true
-    - cd /app && poetry install --only main
+    - cd /app && poetry install
     - cd /app && poetry cache clear pypi --all

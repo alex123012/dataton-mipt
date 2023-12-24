@@ -12,12 +12,12 @@ global:
       containers:
         app:
           secretEnvVars:
-            REDIS_URL: 'redis://:{{ (index $.Values "apps-secrets").redis_secret.data.REDIS_PASSWORD | list $ . | include "fl.value" }}@{{ printf "%s-master" (include "common.names.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.redis)) }}:6379'
+            REDIS_URL: 'redis://:{{ (index (index $.Values "apps-secrets") "redis-secret").data.REDIS_PASSWORD | list $ . | include "fl.value" }}@{{ printf "%s-master" (include "common.names.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.redis)) }}:6379'
     postgres-conn-str:
       containers:
         app:
           secretEnvVars:
-            DATABASE_URL: 'postgresql://{{ $.Values.postgresql.auth.username }}:{{ (index $.Values "apps-secrets").postgres_secret.data.USER_PASSWORD | list $ . | include "fl.value" }}@{{ include "postgresql.v1.primary.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.postgresql) }}:5432/{{ $.Values.postgresql.auth.database }}'
+            DATABASE_URL: 'postgresql://{{ $.Values.postgresql.auth.username }}:{{(index (index $.Values "apps-secrets") "postgres-secret").data.USER_PASSWORD | list $ . | include "fl.value" }}@{{ include "postgresql.v1.primary.fullname" (dict "Chart" .Chart "Template" .Template "Values" $.Values.postgresql) }}:5432/{{ $.Values.postgresql.auth.database }}'
 
     apps-stateless-app:
       _include:
@@ -50,7 +50,7 @@ apps-stateless:
           - app:app
         ports: |
           - name: http
-            port: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
+            containerPort: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
         resources:
           limits:
             memoryMb: 512
@@ -77,8 +77,8 @@ apps-stateless:
       app:
         command: |
           - celery
-          - beat
           - --app=tasks
+          - beat
           - --loglevel=INFO
           - --scheduler=redbeat.RedBeatScheduler
         resources:
@@ -99,8 +99,8 @@ apps-stateless:
       app:
         command: |
           - celery
-          - worker
           - --app=tasks
+          - worker
           - --loglevel=INFO
         resources:
           limits:
@@ -128,7 +128,7 @@ postgresql:
   primary:
     persistence:
       size: 4Gi
-      storageClass: linstor_sdb
+      storageClass: linstor-data-sdb-r1
 
 redis:
   architecture: standalone
@@ -146,7 +146,7 @@ redis:
   master:
     persistence:
       size: 2Gi
-      storageClass: linstor_sdb
+      storageClass: linstor-data-sdb-r1
   serviceAccount:
     create: false
 

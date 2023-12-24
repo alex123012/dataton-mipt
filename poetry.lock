@@ -399,6 +399,20 @@ redis = ">=3.2"
 tenacity = "*"
 
 [[package]]
+name = "celery-types"
+version = "0.20.0"
+description = "Type stubs for Celery and its related packages"
+optional = false
+python-versions = ">=3.10,<4.0"
+files = [
+    {file = "celery-types-0.20.0.tar.gz", hash = "sha256:e5c762555605ed0592baed9d519230046ce8e7a11c67a821555c08b7cece1960"},
+    {file = "celery_types-0.20.0-py3-none-any.whl", hash = "sha256:5ebf858a4bf73ca610652d82940dc3a2e4c86afed0421ab1becbff66b49feea4"},
+]
+
+[package.dependencies]
+typing-extensions = ">=3.10.0,<5.0.0"
+
+[[package]]
 name = "certifi"
 version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -3783,4 +3797,4 @@ websockets = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "7df166f114e805023b8556d5726244448641abfb013fdc22ae0395a912526b3f"
+content-hash = "d5d7e271db7569149db4342d6bc49adeb0241bf4492231b10006b24a47cd5827"

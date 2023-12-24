@@ -4,14 +4,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Generator
 
-from authlib.integrations.starlette_client import OAuth, OAuthError
+from authlib.integrations.starlette_client import OAuth, OAuthError  # type:ignore[import-untyped]
 from celery.schedules import schedule
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from redbeat import RedBeatSchedulerEntry
+from redbeat import RedBeatSchedulerEntry  # type:ignore[import-untyped]
 from starlette import status
 from starlette.config import Config
 from starlette.middleware.sessions import SessionMiddleware
@@ -63,10 +63,10 @@ def get_login_and_name(request: Request) -> UserData | None:
     if not userinfo:
         return None
 
-    login, name = userinfo.get("login", ""), userinfo.get("name", "")
-    if not login or not name:
+    user_login, user_name = userinfo.get("login", ""), userinfo.get("name", "")
+    if not login or not user_name:
         return None
-    return UserData(login=login, name=name)
+    return UserData(login=user_login, name=user_name)
 
 
 def get_user_from_session(request: Request, db: Session) -> models.User | None:
