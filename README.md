@@ -2,35 +2,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Сервис по отслеживанию чистоты пляжей</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            text-align: justify; 
-        }
-        h1 { 
-            text-align: center; 
-        }
-        h2 { 
-            border-bottom: 1px solid #ddd; 
-            text-align: center; 
-        }
-        ol { 
-            list-style-type: decimal; 
-            padding-left: 20px; 
-        }
-        li { 
-            margin-bottom: 10px; 
-        }
-        p { 
-            line-height: 1.6; 
-            text-indent: 20px;
-        }
-        .conclusion { 
-            font-style: italic; 
-            text-align: center; 
-        }
-    </style>
 </head>
 <body>
 
