@@ -23,17 +23,18 @@ class YoutubeVideoParser(AbstractVideoParser):
             "CAP_PROP_FPS": 30,
             "STREAM_PARAMS": {
                 "nocheckcertificate": True,
-                "external_downloader_args": "ffmpeg:-http_persistent 0",
+                "external_downloader_args": "ffmpeg:-http_persistent -1",
             },
         }
 
         self.frame_delay = delay_secs * 30
 
-    def get_frame(self: Self) -> np.ndarray:
+    def get_frame(self: Self) -> np.ndarray | None:
         __stream = CamGear(**self.__cam_gear_params).start()
+        frame = None
         try:
             frame = __stream.read()
-        except Exception:
+        except Exception:  # pylint:disable=W0702,W0718
             logging.exception("error reading frame")
         finally:
             __stream.stop()

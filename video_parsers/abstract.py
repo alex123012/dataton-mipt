@@ -10,5 +10,9 @@ if TYPE_CHECKING:
 
 class AbstractVideoParser(ABC):
     @abstractmethod
-    def get_frame(self: Self) -> np.ndarray:
+    def __init__(self: Self, stream_url: str) -> None:
+        pass
+
+    @abstractmethod
+    def get_frame(self: Self) -> np.ndarray | None:
         pass

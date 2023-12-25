@@ -13,12 +13,12 @@ git:
   - add: /
     to: /app
     includePaths:
-      - model
-      - notificator
-      - predictor
+      - api_models
+      - notificators
+      - predictors
       - static
       - templates
-      - video_parser
+      - video_parsers
       - app.py
       - poetry.lock
       - pyproject.toml

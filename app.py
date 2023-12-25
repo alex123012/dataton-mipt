@@ -16,8 +16,8 @@ from starlette import status
 from starlette.config import Config
 from starlette.middleware.sessions import SessionMiddleware
 
-from model import crud, models, schemas
-from model.database import SessionLocal, engine
+from api_models import crud, models, schemas
+from api_models.database import SessionLocal, engine
 from tasks import celery_app
 
 
@@ -64,7 +64,7 @@ def get_login_and_name(request: Request) -> UserData | None:
         return None
 
     user_login, user_name = userinfo.get("login", ""), userinfo.get("name", "")
-    if not login or not user_name:
+    if not user_login or not user_name:
         return None
     return UserData(login=user_login, name=user_name)
 

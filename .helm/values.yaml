@@ -63,6 +63,8 @@ apps-stateless:
           GITHUB_ACCESS_TOKEN_URL: "https://github.com/login/oauth/access_token"
           GITHUB_AUTHORIZE_URL: "https://github.com/login/oauth/authorize"
           GITHUB_API_BASE_URL: "https://api.github.com/"
+          SITE_URL: 'https://{{ $.Values.settings.app.domain | list $ . | include "fl.value" }}'
+          SMTP_PASSWORD: '{{ $.Values.settings.smtp.password | list $ . | include "fl.value" }}'
     service:
       enabled: true
       ports: |
@@ -79,7 +81,7 @@ apps-stateless:
           - celery
           - --app=tasks
           - beat
-          - --loglevel=INFO
+          - --loglevel=DEBUG
           - --scheduler=redbeat.RedBeatScheduler
         resources:
           limits:
@@ -87,8 +89,6 @@ apps-stateless:
           requests:
             memoryMb: 256
             mcpu: 100
-        secretEnvVars:
-          REDIS_URL:
 
   worker:
     _include:
@@ -101,7 +101,7 @@ apps-stateless:
           - celery
           - --app=tasks
           - worker
-          - --loglevel=INFO
+          - --loglevel=DEBUG
         resources:
           limits:
             memoryMb: 2048

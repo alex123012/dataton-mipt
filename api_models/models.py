@@ -14,6 +14,7 @@ class Base(DeclarativeBase):
 
 class Predictor(enum.Enum):
     MOCK = "Mock"
+    BEACHGRABAGE = "Beach garbage"
 
 
 class VideoParser(enum.Enum):
@@ -28,14 +29,14 @@ class Stream(Base):
     video_parser: Mapped[VideoParser] = mapped_column(Enum(VideoParser))
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
-    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())  # pylint:disable=E1102
+    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())  # pylint:disable=E1102
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True, index=True)
     user: Mapped[User] = relationship(back_populates="streams")
 
     def __repr__(self: Self) -> str:
-        return f"Stream(name={self.name!r}, url={self.url!r}, predictor={self.predictor!r}, video_parser={self.video_parser!r}, is_active={self.is_active!r})"  # noqa:E501
+        return f"Stream(name={self.name!r}, url={self.url!r}, predictor={self.predictor!r}, video_parser={self.video_parser!r}, is_active={self.is_active!r})"  # noqa:E501 pylint:disable=C0301
 
     def __str__(self: Self) -> str:
         return self.__repr__()
@@ -43,6 +44,7 @@ class Stream(Base):
 
 class NotificatorType(enum.Enum):
     TELEGRAM = "Telegram"
+    EMAIL = "email"
 
 
 class Notificator(Base):
@@ -52,14 +54,14 @@ class Notificator(Base):
     settings: Mapped[dict[str, str]] = mapped_column(JSON)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
 
-    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())
-    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    time_created = mapped_column(DateTime(timezone=True), server_default=func.now())  # pylint:disable=E1102
+    time_updated = mapped_column(DateTime(timezone=True), onupdate=func.now())  # pylint:disable=E1102
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True, index=True)
     user: Mapped[User] = relationship(back_populates="notificators")
 
     def __repr__(self: Self) -> str:
-        return f"Notificator(name={self.name!r}, kind={self.kind!r}, settings={self.settings!r},  is_active={self.is_active!r})"  # noqa: E501
+        return f"Notificator(name={self.name!r}, kind={self.kind!r}, settings={self.settings!r},  is_active={self.is_active!r})"  # noqa: E501 pylint:disable=C0301
 
     def __str__(self: Self) -> str:
         return self.__repr__()
