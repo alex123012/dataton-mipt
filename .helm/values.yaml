@@ -36,6 +36,15 @@ global:
             generateSignatureBasedTag: true
           securityContext: |
             allowPrivilegeEscalation: false
+    apps-ingress:
+      _include:
+        - "apps-defaults"
+      enabled: true
+      class: nginx
+      tls:
+        enabled: true
+        secret_name: "{{ $.CurrentApp.name }}-tls"
+
 
 apps-stateless:
   app:
@@ -48,6 +57,11 @@ apps-stateless:
         command: |
           - uvicorn
           - app:app
+        args:
+          - --host=0.0.0.0
+          - --port={{ $.Values.settings.app.port | list $ . | include "fl.value" }}
+          - --forwarded-allow-ips
+          - '*'
         ports: |
           - name: http
             containerPort: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
@@ -104,9 +118,9 @@ apps-stateless:
           - --loglevel=DEBUG
         resources:
           limits:
-            memoryMb: 2048
+            memoryMb: 8192
           requests:
-            memoryMb: 2048
+            memoryMb: 8192
             mcpu: 500
 
 postgresql:
@@ -151,12 +165,11 @@ redis:
     create: false
 
 apps-ingresses:
-  api:
-    _include: ["apps-defaults"]
-    enabled: true
-    class: "nginx"
+  app:
+    _include: [apps-ingress]
     host: '{{ $.Values.settings.app.domain | list $ . | include "fl.value" }}'
     annotations: |
+      nginx.ingress.kubernetes.io/proxy-buffer-size: 8k
       nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
       nginx.ingress.kubernetes.io/cors-allow-methods: PUT, GET, POST, OPTIONS, DELETE
       nginx.ingress.kubernetes.io/cors-allow-origin: {{ $.Values.settings.app.domain | list $ . | include "fl.value" }}
@@ -169,9 +182,6 @@ apps-ingresses:
             name: "{{ $.CurrentApp.name }}"
             port:
               number: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
-    tls:
-      enabled: true
-      secret_name: "app-tls"
 apps-certificates:
   app-tls:
     _include: ["apps-defaults"]
