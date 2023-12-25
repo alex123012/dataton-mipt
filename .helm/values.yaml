@@ -57,11 +57,10 @@ apps-stateless:
         command: |
           - uvicorn
           - app:app
-        args:
+        args: |
           - --host=0.0.0.0
           - --port={{ $.Values.settings.app.port | list $ . | include "fl.value" }}
-          - --forwarded-allow-ips
-          - '*'
+          - --forwarded-allow-ips='*'
         ports: |
           - name: http
             containerPort: {{ $.Values.settings.app.port | list $ . | include "fl.value" }}
@@ -122,6 +121,8 @@ apps-stateless:
           requests:
             memoryMb: 8192
             mcpu: 500
+        secretEnvVars:
+          SMTP_PASSWORD: '{{ $.Values.settings.smtp.password | list $ . | include "fl.value" }}'
 
 postgresql:
   fullnameOverride: postgres
