@@ -98,9 +98,9 @@ apps-stateless:
           - --scheduler=redbeat.RedBeatScheduler
         resources:
           limits:
-            memoryMb: 256
+            memoryMb: 16384
           requests:
-            memoryMb: 256
+            memoryMb: 8192
             mcpu: 100
 
   worker:
@@ -117,7 +117,7 @@ apps-stateless:
           - --loglevel=DEBUG
         resources:
           limits:
-            memoryMb: 8192
+            memoryMb: 16384
           requests:
             memoryMb: 8192
             mcpu: 500
