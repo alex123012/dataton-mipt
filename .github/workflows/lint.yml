@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.11"]
-        linter: ["mypy", "ruff", "pylint", "black --check"]
+        linter: ["mypy --install-types", "ruff", "pylint --generated-members", "black --check"]
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
