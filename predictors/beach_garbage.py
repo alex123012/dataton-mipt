@@ -55,7 +55,7 @@ class BeachGarbagePredictor(AbstractPredictor):
         self.__threshold = threshold
 
         # Load the garbage detection model
-        self.__model = yolov5.load("keremberke/yolov5s-garbage")
+        self.__model = yolov5.load("keremberke/yolov5n-garbage")
 
         # Set model parameters
         self.__model.conf = conf  # Set NMS confidence threshold
