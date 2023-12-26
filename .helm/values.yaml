@@ -27,8 +27,8 @@ global:
         kubectl.kubernetes.io/default-container: app
       securityContext: |
         runAsNonRoot: true
-        runAsUser: 65534
-        runAsGroup: 65534
+        runAsUser: 1001
+        runAsGroup: 1001
       containers:
         app:
           image:

@@ -9,6 +9,7 @@ docker:
   ENV:
     PYTHONPATH: /app
     PATH: "/app/.venv/bin:$PATH"
+  USER: dataton-mipt
 git:
   - add: /
     to: /app
@@ -38,3 +39,7 @@ shell:
     - cd /app && poetry config virtualenvs.in-project true
     - cd /app && poetry install
     - cd /app && poetry cache clear pypi --all
+  setup:
+    - groupadd --gid 1001 dataton-mipt
+    - useradd --uid 1001 --gid 1001 -m dataton-mipt
+    - chown -R 1001:1001 /home/dataton-mipt /app
