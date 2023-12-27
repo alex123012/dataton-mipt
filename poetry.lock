@@ -149,17 +149,17 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "boto3"
-version = "1.34.7"
+version = "1.34.8"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "boto3-1.34.7-py3-none-any.whl", hash = "sha256:04c1cc752946f20513ed70058d4b750b3591c82bb59cbbe26157dbe125e687cc"},
-    {file = "boto3-1.34.7.tar.gz", hash = "sha256:76b62ca46a4632117b4cd31ae56164492e41afb9fec41973688293c536580561"},
+    {file = "boto3-1.34.8-py3-none-any.whl", hash = "sha256:d6d254a467f6859f445de9ddb6bcbdd3d688f7e08b8dbe45ddd30367ec113722"},
+    {file = "boto3-1.34.8.tar.gz", hash = "sha256:9b5136832118c3edd580d92d0529d62300ec8ecced0a0572e985e67b360770e4"},
 ]
 
 [package.dependencies]
-botocore = ">=1.34.7,<1.35.0"
+botocore = ">=1.34.8,<1.35.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -168,13 +168,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.34.7"
+version = "1.34.8"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">= 3.8"
 files = [
-    {file = "botocore-1.34.7-py3-none-any.whl", hash = "sha256:85164e924965c850fb02b1edcbef03f61413aff5f0064e660992b8b76c996d0c"},
-    {file = "botocore-1.34.7.tar.gz", hash = "sha256:b145a52b7d1fd4e072bcd692369d4cb77f971651bb0dc2bf38e2b4f9d62973e6"},
+    {file = "botocore-1.34.8-py3-none-any.whl", hash = "sha256:75bedd4130978a5b6068ef36c1f9e3616f57696b736143c3f19d995cd842007a"},
+    {file = "botocore-1.34.8.tar.gz", hash = "sha256:02a4026d713a2af1e33a77abd95ef83115efd3ea7bd01a2cffef35fef89acfe1"},
 ]
 
 [package.dependencies]
@@ -2073,8 +2073,8 @@ files = [
 
 [package.dependencies]
 numpy = [
-    {version = ">=1.26.0,<2", markers = "python_version >= \"3.12\""},
     {version = ">=1.23.2,<2", markers = "python_version == \"3.11\""},
+    {version = ">=1.26.0,<2", markers = "python_version >= \"3.12\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -2598,8 +2598,8 @@ files = [
 astroid = ">=3.0.1,<=3.1.0-dev0"
 colorama = {version = ">=0.4.5", markers = "sys_platform == \"win32\""}
 dill = [
-    {version = ">=0.3.7", markers = "python_version >= \"3.12\""},
     {version = ">=0.3.6", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
+    {version = ">=0.3.7", markers = "python_version >= \"3.12\""},
 ]
 isort = ">=4.2.5,<5.13.0 || >5.13.0,<6"
 mccabe = ">=0.6,<0.8"
@@ -3482,6 +3482,17 @@ tests = ["autopep8", "flake8", "isort", "numpy", "pytest", "scipy (>=1.7.1)"]
 tutorials = ["matplotlib", "pandas", "tabulate"]
 
 [[package]]
+name = "types-markdown"
+version = "3.5.0.3"
+description = "Typing stubs for Markdown"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-Markdown-3.5.0.3.tar.gz", hash = "sha256:9afd38a8f53e19d43de3f8d89742b3674b5736767806ed9356d64ccb09f76439"},
+    {file = "types_Markdown-3.5.0.3-py3-none-any.whl", hash = "sha256:2299b9086c695f408a3ebabf820f1fba3b239f1b3bfdbb32bf42d530b42cdd83"},
+]
+
+[[package]]
 name = "types-pyyaml"
 version = "6.0.12.12"
 description = "Typing stubs for PyYAML"
@@ -3530,13 +3541,13 @@ files = [
 
 [[package]]
 name = "ultralytics"
-version = "8.0.229"
+version = "8.0.230"
 description = "Ultralytics YOLOv8 for SOTA object detection, multi-object tracking, instance segmentation, pose estimation and image classification."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "ultralytics-8.0.229-py3-none-any.whl", hash = "sha256:c21d5f8d973ac845a8376959ad09cbc02f5274116a0870520750f5c7a71c5dfd"},
-    {file = "ultralytics-8.0.229.tar.gz", hash = "sha256:9c203a4698f569c37d432c72184a883bb355b46efc8d808323e7c854d8ad2c91"},
+    {file = "ultralytics-8.0.230-py3-none-any.whl", hash = "sha256:d2df77d5449a46190ba38bf1e46027986b42487307072ff06bdb9422b96a3778"},
+    {file = "ultralytics-8.0.230.tar.gz", hash = "sha256:287d62a186e799bccbbe25fed2f578642e77a9eba185de697884a6bf30a30fe7"},
 ]
 
 [package.dependencies]
@@ -3557,7 +3568,7 @@ torchvision = ">=0.9.0"
 tqdm = ">=4.64.0"
 
 [package.extras]
-dev = ["check-manifest", "coverage", "ipython", "mkdocs-material", "mkdocs-redirects", "mkdocs-ultralytics-plugin (>=0.0.34)", "mkdocstrings[python]", "pre-commit", "pytest", "pytest-cov"]
+dev = ["check-manifest", "coverage", "ipython", "mkdocs-material", "mkdocs-redirects", "mkdocs-ultralytics-plugin (>=0.0.35)", "mkdocstrings[python]", "pre-commit", "pytest", "pytest-cov"]
 export = ["coremltools (>=7.0)", "jax (<=0.4.21)", "jaxlib (<=0.4.21)", "openvino-dev (>=2023.0)", "tensorflow (<=2.13.1)", "tensorflowjs"]
 
 [[package]]
@@ -3797,4 +3808,4 @@ websockets = "*"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "d5d7e271db7569149db4342d6bc49adeb0241bf4492231b10006b24a47cd5827"
+content-hash = "9520419f61dbb9b783c00a6fb99a4f8a70b8d27ccb8159c0b6e459a8e70d7528"

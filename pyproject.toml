@@ -34,6 +34,7 @@ ruff = "^0.0.292"
 types-pyyaml = "^6.0.12.12"
 types-requests = "^2.31.0.10"
 celery-types = "^0.20.0"
+types-markdown = "^3.5.0.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -46,6 +47,8 @@ line-length = 120
 [tool.pylint]
 disable = "C0115,C0114,C0116,R0903,W0201"
 max-line-length = 120
+extension-pkg-whitelist = "cv2"
+generated-members = "cv2"
 
 [tool.black]
 line-length = 120
