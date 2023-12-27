@@ -1,86 +1,152 @@
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-  <title>Item Details</title>
-  <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dataton Mipt</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="static/styles.css">
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+    crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body style="background: #f2f6e9;">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background: #6ab446;">
+    <div class="container">
+      <span class="navbar-brand mb-0 h1 text-light"> {%if userinfo %}Hello, {{ userinfo.name }}{% else %}Please, login{%
+        endif
+        %}</span>
+      <div class="justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="btn btn-light btn-outline-dark" type="button" href={%if userinfo %}"/logout">logout{% else %}
+              "/login">login{% endif %}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+  <div class="mt-5 container text-center description">
+    <h1 style="color: #6ab446;">Welcome!</h1>
+    <p style="font-size: 1.3rem; line-height: 1.5;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque
+      interdum quam odio, quis placerat ante luctus
+      eu. Sed aliquet dolor id sapien rutrum, id vulputate quam iaculis. Suspendisse consectetur mi id libero fringilla,
+      in pharetra sem ullamcorper.</p>
+  </div>
+
   {%if userinfo %}
-  <h1>Hello, {{ userinfo.name }}</h1>
-  <a href="/logout">logout</a>
-  <form action="/notificators" method="POST">
-    <label for="name">Notificator name:</label><br>
-    <input type="text" id="name" name="name"><br>
 
-    <label for="kind">Notificator kind:</label><br>
-    <select name="kind" id="kind">
-      {% for notificator_type in notificator_types %}
-      <option value="{{ notificator_type.value }}">{{ notificator_type.value }}</option>
-      {% endfor %}
-    </select><br>
+  <div class="container  features">
+    <div class="row">
+      <form class="col-lg" action="/notificators" method="POST">
+        <label class="form-label" for="name">Notificator name:</label><br>
+        <input class="form-control" type="text" id="name" name="name"><br>
 
-    <label for="settings">Notificator settings in '&lt;key&gt;=&lt;value&gt;,&lt;key&gt;=&lt;value&gt;'
-      format</label><br>
-    <input type="text" id="settings" name="settings"><br><br>
+        <label class="form-label" for="kind">Notificator kind:</label><br>
+        <input class="form-control" list="kindlist" name="kind" id="kind" placeholder="Type to search...">
+        <datalist name="kind" id="kindlist">
+          {% for notificator_type in notificator_types %}
+          <option value="{{ notificator_type.value }}"/>
+          {% endfor %}
+        </datalist><br>
 
-    <input type="submit" value="Create new notificator">
-  </form>
+        <label class="form-label" for="settings">Notificator settings in '&lt;key&gt;=&lt;value&gt;,&lt;key&gt;=&lt;value&gt;'
+          format</label><br>
+        <input class="form-control" type="text" id="settings" name="settings"><br><br>
 
-
-  <form action="/streams" method="POST" id="streams">
-    <label for="name">Stream name:</label><br>
-    <input type="text" id="name" name="name"><br>
-
-    <label for="settings">Stream url:</label><br>
-    <input type="text" id="url" name="url"><br>
-
-    <label for="predictor">Predictor:</label><br>
-    <select name="predictor" id="predictor">
-      {% for predictor in predictors %}
-      <option value="{{ predictor.value }}">{{ predictor.value }}</option>
-      {% endfor %}
-    </select><br>
-
-    <label for="video_parser">Stream video parser:</label><br>
-    <select name="video_parser" id="video_parser">
-      {% for video_parser in video_parsers %}
-      <option value="{{ video_parser.value }}">{{ video_parser.value }}</option>
-      {% endfor %}
-    </select><br><br>
-
-    <input type="submit" value="Create new stream">
-  </form>
-
-  <h2>Notificators</h2>
-  <ul>
-    {%for notificator in notificators%}
-    <li>
-      {{ notificator }}
-      <form action="/notificators/delete" method="GET">
-        <input type="hidden" name="name" id="name" value="{{ notificator.name }}" />
-        <input type="submit" value="delete">
+        <input class="btn btn-secondary btn-block" type="submit" value="Create new notificator">
       </form>
-    </li>
-    {%endfor%}
-  </ul>
 
+      <form class="col-lg" action="/streams" method="POST" id="streams">
+        <label class="form-label" for="name">Stream name:</label><br>
+        <input class="form-control" type="text" id="name" name="name"><br>
 
-  <h2>Streams</h2>
-  <ul>
-    {%for stream in streams%}
-    <li>
-      {{ stream }}
-      <form action="/streams/delete" method="GET">
-        <input type="hidden" name="name" id="name" value="{{ stream.name }}" />
-        <input type="submit" value="delete">
+        <label class="form-label" for="settings">Stream url:</label><br>
+        <input class="form-control" type="text" id="url" name="url"><br>
+
+        <label class="form-label" for="predictor">Predictor:</label><br>
+        <input class="form-control" list="predictorlist" name="predictor" id="predictor" placeholder="Type to search...">
+        <datalist name="predictor" id="predictorlist">
+          {% for predictor in predictors %}
+          <option value="{{ predictor.value }}">{{ predictor.value }}</option>
+          {% endfor %}
+        </datalist><br>
+
+        <label class="form-label" for="video_parser">Stream video parser:</label><br>
+        <input class="form-control" list="video_parserlist" name="video_parser" id="video_parser" placeholder="Type to search...">
+        <datalist name="video_parser" id="video_parserlist">
+          {% for video_parser in video_parsers %}
+          <option value="{{ video_parser.value }}">{{ video_parser.value }}</option>
+          {% endfor %}
+        </datalist><br><br>
+
+        <input class="btn btn-secondary btn-block" type="submit" value="Create new stream">
       </form>
-    </li>
-    {%endfor%}
-  </ul>
+    </div>
 
-  {% else %}
-  <a href="/login">login</a>
+    <div class="row row-cols-2 pt-5">
+      {% set models = [[notificators, "Notificators"], [streams, "Streams"]]%}
+      {% for model in models %}
+      <div class="container-fluid">
+        <h2>{{ model[1] }}</h2>
+        {% for i in range(0, model[0]| length, 2) %}
+
+        {% set r = 1 %}
+        {% if (model[0]| length) > (i + 1) %}
+        {% set r = 2 %}
+        {% endif %}
+        <!-- <div class="row row-cols-2"> -->
+        {% for n in range(r)%}
+        <div class="col-lg card">
+          <div class="card-body">
+            <h4 class="card-title">{{ model[0][i+n].name }}</h5>
+              {% if model[1] == "Notificators" %}
+              <h5 class="card-subtitle mb-2 text-muted">kind: {{ model[0][i+n].kind.value }}</h6>
+                <p class="card-text m-2">
+                  <span>Settings:</span><br>
+                  {% for key in model[0][i+n].settings %}
+                  <span class="m-4">{{ key }}: {{ model[0][i+n].settings[key] }} </span><br>
+                  {% endfor %}
+                </p>
+                {% else %}
+                <h5 class="card-subtitle mb-2 text-muted">predictor: {{ model[0][i+n].predictor.value }}</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">video parser: {{ model[0][i+n].video_parser.value }}
+                </h5>
+                <p class="card-text m-2">url: <a target="_blank" href="{{ model[0][i+n].url }}">{{ model[0][i+n].url
+                    }}</a></p>
+                {% endif %}
+
+                <form action="/{{ model[1] | lower }}/delete" method="GET">
+                  <input type="hidden" name="name" id="name" value="{{ model[0][i+n].name }}" />
+                  <input class="btn btn-secondary btn-block" type="submit" value="delete">
+                </form>
+          </div>
+        </div>
+        {%endfor%}
+        <!-- </div> -->
+        {%endfor%}
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+
   {% endif %}
 </body>
 

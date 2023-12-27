@@ -33,8 +33,8 @@ class BeachGarbagePredictor(AbstractPredictor):
     def __init__(  # noqa:PLR0913 pylint:disable=R0913
         self: Self,
         threshold: int = 3,
-        conf: float = 0.3,
-        iou: float = 0.5,
+        conf: float = 0.2,
+        iou: float = 0.4,
         agnostic: bool = False,
         multi_label: bool = False,
         max_det: int = 100,
@@ -55,7 +55,7 @@ class BeachGarbagePredictor(AbstractPredictor):
         self.__threshold = threshold
 
         # Load the garbage detection model
-        self.__model = yolov5.load("keremberke/yolov5n-garbage")
+        self.__model = yolov5.load("keremberke/yolov5m-garbage")
 
         # Set model parameters
         self.__model.conf = conf  # Set NMS confidence threshold
