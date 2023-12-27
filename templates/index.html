@@ -67,7 +67,8 @@
           {% endfor %}
         </datalist><br>
 
-        <label class="form-label" for="settings">Notificator settings in '&lt;key&gt;=&lt;value&gt;,&lt;key&gt;=&lt;value&gt;'
+        <label class="form-label" for="settings">Notificator settings in
+          '&lt;key&gt;=&lt;value&gt;,&lt;key&gt;=&lt;value&gt;'
           format</label><br>
         <input class="form-control" type="text" id="settings" name="settings"><br><br>
 
@@ -82,7 +83,8 @@
         <input class="form-control" type="text" id="url" name="url"><br>
 
         <label class="form-label" for="predictor">Predictor:</label><br>
-        <input class="form-control" list="predictorlist" name="predictor" id="predictor" placeholder="Type to search...">
+        <input class="form-control" list="predictorlist" name="predictor" id="predictor"
+          placeholder="Type to search...">
         <datalist name="predictor" id="predictorlist">
           {% for predictor in predictors %}
           <option value="{{ predictor.value }}">{{ predictor.value }}</option>
@@ -90,7 +92,8 @@
         </datalist><br>
 
         <label class="form-label" for="video_parser">Stream video parser:</label><br>
-        <input class="form-control" list="video_parserlist" name="video_parser" id="video_parser" placeholder="Type to search...">
+        <input class="form-control" list="video_parserlist" name="video_parser" id="video_parser"
+          placeholder="Type to search...">
         <datalist name="video_parser" id="video_parserlist">
           {% for video_parser in video_parsers %}
           <option value="{{ video_parser.value }}">{{ video_parser.value }}</option>
@@ -106,41 +109,32 @@
       {% for model in models %}
       <div class="container-fluid">
         <h2>{{ model[1] }}</h2>
-        {% for i in range(0, model[0]| length, 2) %}
-
-        {% set r = 1 %}
-        {% if (model[0]| length) > (i + 1) %}
-        {% set r = 2 %}
-        {% endif %}
-        <!-- <div class="row row-cols-2"> -->
-        {% for n in range(r)%}
+        {% for i in range(model[0]| length) %}
         <div class="col-lg card">
           <div class="card-body">
-            <h4 class="card-title">{{ model[0][i+n].name }}</h5>
+            <h4 class="card-title">{{ model[0][i].name }}</h5>
               {% if model[1] == "Notificators" %}
-              <h5 class="card-subtitle mb-2 text-muted">kind: {{ model[0][i+n].kind.value }}</h6>
+              <h5 class="card-subtitle mb-2 text-muted">kind: {{ model[0][i].kind.value }}</h6>
                 <p class="card-text m-2">
                   <span>Settings:</span><br>
-                  {% for key in model[0][i+n].settings %}
-                  <span class="m-4">{{ key }}: {{ model[0][i+n].settings[key] }} </span><br>
+                  {% for key in model[0][i].settings %}
+                  <span class="m-4">{{ key }}: {{ model[0][i].settings[key] }} </span><br>
                   {% endfor %}
                 </p>
                 {% else %}
-                <h5 class="card-subtitle mb-2 text-muted">predictor: {{ model[0][i+n].predictor.value }}</h6>
-                  <h6 class="card-subtitle mb-2 text-muted">video parser: {{ model[0][i+n].video_parser.value }}
+                <h5 class="card-subtitle mb-2 text-muted">predictor: {{ model[0][i].predictor.value }}</h6>
+                  <h6 class="card-subtitle mb-2 text-muted">video parser: {{ model[0][i].video_parser.value }}
                 </h5>
-                <p class="card-text m-2">url: <a target="_blank" href="{{ model[0][i+n].url }}">{{ model[0][i+n].url
+                <p class="card-text m-2">url: <a target="_blank" href="{{ model[0][i].url }}">{{ model[0][i].url
                     }}</a></p>
                 {% endif %}
 
                 <form action="/{{ model[1] | lower }}/delete" method="GET">
-                  <input type="hidden" name="name" id="name" value="{{ model[0][i+n].name }}" />
+                  <input type="hidden" name="name" id="name" value="{{ model[0][i].name }}" />
                   <input class="btn btn-secondary btn-block" type="submit" value="delete">
                 </form>
           </div>
         </div>
-        {%endfor%}
-        <!-- </div> -->
         {%endfor%}
       </div>
       {%endfor%}
